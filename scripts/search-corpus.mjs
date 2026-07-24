@@ -1,24 +1,17 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
 import { buildBm25Index, searchBm25 } from "./lib/bm25.mjs";
+import {
+  loadVerifiedCorpusRelease,
+  parseJsonLines,
+} from "./lib/corpus-release.mjs";
 
 const query = process.argv.slice(2).join(" ").trim();
 if (!query) {
   console.error('Usage: npm run search -- "children leave bread crumbs"');
   process.exitCode = 2;
 } else {
-  const releaseRoot = path.resolve("data/derived/releases/corpus-v0.1.0");
-  const parse = (contents) =>
-    contents
-      .trim()
-      .split("\n")
-      .filter(Boolean)
-      .map((line) => JSON.parse(line));
-  const [passages, documents] = await Promise.all([
-    readFile(path.join(releaseRoot, "passages.jsonl"), "utf8").then(parse),
-    readFile(path.join(releaseRoot, "documents.jsonl"), "utf8").then(parse),
-  ]);
+  const release = await loadVerifiedCorpusRelease();
+  const passages = parseJsonLines(release.files.passages);
+  const documents = parseJsonLines(release.files.documents);
   const documentById = new Map(
     documents.map((document) => [document.id, document]),
   );
@@ -36,7 +29,7 @@ if (!query) {
     JSON.stringify(
       {
         query,
-        corpusRelease: "fa:release:corpus-v0.1.0",
+        corpus: release.identity,
         results: results.map((result, index) => ({
           rank: index + 1,
           title: documentById.get(result.documentId)?.title,
