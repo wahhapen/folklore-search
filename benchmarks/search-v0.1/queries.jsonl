@@ -1,0 +1,18 @@
+{"id":"title-01","category":"title","query":"The Golden Bird","judgments":[{"documentId":"fa:document:pg-2591:toc-001","grade":3}],"note":"Exact edition title."}
+{"id":"title-02","category":"title","query":"Momotaro story","judgments":[{"documentId":"fa:document:pg-4018:toc-018","grade":3}],"note":"Distinctive title token."}
+{"id":"title-03","category":"title","query":"The Little Match Girl","judgments":[{"documentId":"fa:document:pg-1597:toc-015","grade":3}],"note":"Exact edition title."}
+{"id":"entity-01","category":"entity","query":"princess tested with a pea under mattresses","judgments":[{"documentId":"fa:document:pg-1597:toc-003","grade":3}],"note":"Character plus diagnostic object."}
+{"id":"entity-02","category":"entity","query":"monkey and crab quarrel revenge","judgments":[{"documentId":"fa:document:pg-4018:toc-015","grade":3}],"note":"Named animals and conflict."}
+{"id":"entity-03","category":"entity","query":"fisherman magic fish wife wants palace","judgments":[{"documentId":"fa:document:pg-2591:toc-010","grade":3}],"note":"Characters, helper and escalating wish."}
+{"id":"entity-04","category":"entity","query":"little tailor kills seven flies","judgments":[{"documentId":"fa:document:pg-2591:toc-018","grade":3}],"note":"Character and signature boast."}
+{"id":"scene-01","category":"situation","query":"children leave bread crumbs birds eat them","judgments":[{"documentId":"fa:document:pg-2591:toc-019","grade":3}],"note":"Remembered scene rather than title."}
+{"id":"scene-02","category":"situation","query":"fox helps youngest prince find golden bird","judgments":[{"documentId":"fa:document:pg-2591:toc-001","grade":3}],"note":"Helper and quest scene."}
+{"id":"scene-03","category":"situation","query":"sea maiden skin hidden husband breaks promise","judgments":[{"documentId":"fa:document:pg-7885:toc-017","grade":3}],"note":"Remembered supernatural-marriage scene."}
+{"id":"scene-04","category":"situation","query":"white snake lets servant understand animals","judgments":[{"documentId":"fa:document:pg-2591:toc-036","grade":3}],"note":"Transformation of ability."}
+{"id":"scene-05","category":"situation","query":"youngest brother feeds ants ducks bees","judgments":[{"documentId":"fa:document:pg-2591:toc-038","grade":3}],"note":"Helpers earned through kindness."}
+{"id":"theme-01","category":"theme","query":"man happily trades away everything until he has nothing","judgments":[{"documentId":"fa:document:pg-2591:toc-002","grade":3}],"note":"Plot paraphrase."}
+{"id":"theme-02","category":"theme","query":"children escape pursuit by changing into pond duck and thorn bush","judgments":[{"documentId":"fa:document:pg-2591:toc-017","grade":3}],"note":"Transformation-flight sequence."}
+{"id":"theme-03","category":"theme","query":"animal companion repeatedly warns hero against bad choices on quest","judgments":[{"documentId":"fa:document:pg-2591:toc-001","grade":3}],"note":"Helper relationship paraphrase."}
+{"id":"theme-04","category":"theme","query":"girl journeys to rescue friend after enchanted mirror ice enters his heart","judgments":[{"documentId":"fa:document:pg-1597:toc-006","grade":3}],"note":"Long-form thematic paraphrase."}
+{"id":"negative-01","category":"negative","query":"vampire space station","negative":true,"judgments":[],"note":"Deliberate out-of-corpus conjunction."}
+{"id":"negative-02","category":"negative","query":"Baba Yaga iron rocket","negative":true,"judgments":[],"note":"Culturally adjacent name plus absent object."}
