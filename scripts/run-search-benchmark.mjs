@@ -1,22 +1,16 @@
-import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { buildBm25Index, searchBm25, tokenize } from "./lib/bm25.mjs";
+import {
+  loadVerifiedCorpusRelease,
+  parseJsonLines,
+} from "./lib/corpus-release.mjs";
 
 const root = process.cwd();
-const releaseRoot = path.join(root, "data/derived/releases/corpus-v0.1.0");
 const benchmarkPath = path.join(root, "benchmarks/search-v0.1/queries.jsonl");
 const reportRoot = path.join(root, "reports/search/search-v0.1");
-
-function parseJsonLines(contents) {
-  return contents
-    .trim()
-    .split("\n")
-    .filter(Boolean)
-    .map((line) => JSON.parse(line));
-}
 
 function mean(values) {
   return values.length
@@ -73,25 +67,17 @@ function evaluate(query, results) {
 }
 
 export async function runSearchBenchmark({ writeReports = true } = {}) {
-  const [
-    queryContents,
-    passageContents,
-    documentContents,
-    witnessContents,
-    manifestContents,
-  ] =
-    await Promise.all([
-      readFile(benchmarkPath, "utf8"),
-      readFile(path.join(releaseRoot, "passages.jsonl"), "utf8"),
-      readFile(path.join(releaseRoot, "documents.jsonl"), "utf8"),
-      readFile(path.join(releaseRoot, "witnesses.jsonl"), "utf8"),
-      readFile(path.join(releaseRoot, "manifest.json"), "utf8"),
-    ]);
+  const [queryContents, release] = await Promise.all([
+    readFile(benchmarkPath, "utf8"),
+    loadVerifiedCorpusRelease(),
+  ]);
+  const passageContents = release.files.passages;
+  const documentContents = release.files.documents;
+  const witnessContents = release.files.witnesses;
   const queries = parseJsonLines(queryContents);
   const passages = parseJsonLines(passageContents);
   const documents = parseJsonLines(documentContents);
   const witnesses = parseJsonLines(witnessContents);
-  const releaseManifest = JSON.parse(manifestContents);
   const documentById = new Map(
     documents.map((document) => [document.id, document]),
   );
@@ -192,10 +178,7 @@ export async function runSearchBenchmark({ writeReports = true } = {}) {
     }).length / Math.max(runRecords.length, 1);
   const metrics = {
     benchmark: "search-v0.1",
-    corpusRelease: releaseManifest.releaseId,
-    corpusManifestSha256: createHash("sha256")
-      .update(manifestContents)
-      .digest("hex"),
+    corpus: release.identity,
     retriever: {
       family: "BM25F",
       titleWeight: 6,

@@ -7,10 +7,11 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "corpus:verify": "node scripts/verify-corpus-release.mjs",
     "search": "node scripts/search-corpus.mjs",
     "benchmark": "node scripts/run-search-benchmark.mjs",
     "test": "vitest run",
-    "validate": "npm run benchmark && npm test"
+    "validate": "npm run corpus:verify && npm run benchmark && npm test"
   },
   "devDependencies": {
     "vitest": "4.1.10"

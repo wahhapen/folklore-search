@@ -13,11 +13,15 @@ theme/paraphrase slice is the starting evidence for the next retrieval study.
 
 ```bash
 npm install
+npm run corpus:verify
 npm run search -- "children leave bread crumbs birds eat them"
 npm run benchmark
 npm test
 ```
 
-`data/derived/releases/corpus-v0.1.0/` is a vendored immutable snapshot. Future
-versions should download a verified `folklore-corpus` release by manifest
-digest rather than duplicate mutable corpus-building logic.
+The current v0.1 snapshot remains vendored temporarily, but Search now resolves
+the single installed Release without a version literal and verifies every
+manifest-declared artifact before indexing. `FOLKLORE_CORPUS_DIR` can point to
+another installed Release. The next transport step is the digest-pinned,
+atomic GitHub Release cache specified in
+`docs/research/corpus-release-consumption-v0.2.md`.
