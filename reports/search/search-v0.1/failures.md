@@ -3,7 +3,7 @@
 ## theme-01: man happily trades away everything until he has nothing
 
 - Expected: Hans In Luck (fa:document:pg-2591:toc-002)
-- Relevant rank: 31
+- Relevant rank: 33
 - Relevant passage: fa:passage:pg-2591:toc-002:text-en:p0007
 - Top result: Nix Nought Nothing (fa:passage:pg-7439:toc-007:text-en:p0001)
 - Query terms present in relevant passage: man, away, he, has

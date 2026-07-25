@@ -18,7 +18,9 @@ describe("Corpus Release consumer boundary", () => {
   });
 
   it("opens a release only after verifying every declared artifact", async () => {
-    const release = await loadVerifiedCorpusRelease();
+    const release = await loadVerifiedCorpusRelease({
+      releaseRoot: resolve("data/derived/releases/corpus-v0.1.0"),
+    });
 
     expect(release.identity).toEqual({
       releaseId: "fa:release:corpus-v0.1.0",
