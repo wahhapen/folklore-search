@@ -66,10 +66,14 @@ function evaluate(query, results) {
   };
 }
 
-export async function runSearchBenchmark({ writeReports = true } = {}) {
+export async function runSearchBenchmark({
+  writeReports = true,
+  releaseRoot,
+  lock,
+} = {}) {
   const [queryContents, release] = await Promise.all([
     readFile(benchmarkPath, "utf8"),
-    loadVerifiedCorpusRelease(),
+    loadVerifiedCorpusRelease({ releaseRoot, lock }),
   ]);
   const passageContents = release.files.passages;
   const documentContents = release.files.documents;

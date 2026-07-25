@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "folklore-corpus-lock-v1",
+  "source": {
+    "repository": "wahhapen/folklore-corpus",
+    "tag": "corpus-v0.2.0",
+    "asset": "folklore-corpus-v0.2.0.tar.gz",
+    "url": "<PUBLISHED_IMMUTABLE_RELEASE_ASSET_URL>"
+  },
+  "archiveSha256": "<PUBLISHED_ARCHIVE_SHA256>",
+  "manifestSha256": "<ENCLOSED_MANIFEST_SHA256>",
+  "releaseId": "fa:release:corpus-v0.2.0",
+  "version": "0.2.0",
+  "manifestSchemaVersion": "folklore-release-manifest-v1"
+}

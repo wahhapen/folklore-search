@@ -1,29 +1,32 @@
-import { readFileSync } from "node:fs";
-
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 
 import { buildBm25Index, searchBm25 } from "../scripts/lib/bm25.mjs";
+import {
+  loadVerifiedCorpusRelease,
+  parseJsonLines,
+} from "../scripts/lib/corpus-release.mjs";
 
-const releaseRoot = "data/derived/releases/corpus-v0.1.0";
-const passages = readFileSync(`${releaseRoot}/passages.jsonl`, "utf8")
-  .trim()
-  .split("\n")
-  .map((line) => JSON.parse(line));
-const documents = new Map(
-  readFileSync(`${releaseRoot}/documents.jsonl`, "utf8")
-    .trim()
-    .split("\n")
-    .map((line) => JSON.parse(line))
-    .map((document) => [document.id, document]),
-);
-const index = buildBm25Index(
-  passages.map((passage) => ({
-    ...passage,
-    title: documents.get(passage.documentId)?.title ?? "",
-  })),
-);
+let documents: Map<string, Record<string, unknown>>;
+let index: ReturnType<typeof buildBm25Index>;
 
 describe("passage BM25 search", () => {
+  beforeAll(async () => {
+    const release = await loadVerifiedCorpusRelease();
+    const passages = parseJsonLines(release.files.passages);
+    documents = new Map(
+      parseJsonLines(release.files.documents).map((document) => [
+        document.id,
+        document,
+      ]),
+    );
+    index = buildBm25Index(
+      passages.map((passage) => ({
+        ...passage,
+        title: documents.get(passage.documentId)?.title ?? "",
+      })),
+    );
+  });
+
   it("finds a title and returns a citable passage", () => {
     const [result] = searchBm25(index, "Hansel and Gretel", { limit: 5 });
     expect(documents.get(result.documentId)?.title).toBe("Hansel And Gretel");

@@ -1,6 +1,16 @@
-import { loadVerifiedCorpusRelease } from "./lib/corpus-release.mjs";
+import path from "node:path";
 
-const release = await loadVerifiedCorpusRelease();
+import {
+  hasActiveCorpusReleaseLock,
+  loadVerifiedCorpusRelease,
+  verifyCachedCorpusRelease,
+} from "./lib/corpus-release.mjs";
+
+const lockPath = path.resolve("corpus-release.lock.json");
+const hasActiveLock = await hasActiveCorpusReleaseLock(lockPath);
+const release = hasActiveLock
+  ? await verifyCachedCorpusRelease({ lockPath })
+  : await loadVerifiedCorpusRelease();
 console.log(
   JSON.stringify(
     {

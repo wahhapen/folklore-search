@@ -7,6 +7,8 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "corpus:fetch": "node scripts/fetch-corpus-release.mjs",
+    "corpus:status": "node scripts/corpus-release-status.mjs",
     "corpus:verify": "node scripts/verify-corpus-release.mjs",
     "search": "node scripts/search-corpus.mjs",
     "benchmark": "node scripts/run-search-benchmark.mjs",
@@ -15,5 +17,9 @@
   },
   "devDependencies": {
     "vitest": "4.1.10"
+  },
+  "dependencies": {
+    "ajv": "8.17.1",
+    "tar": "7.5.22"
   }
 }
