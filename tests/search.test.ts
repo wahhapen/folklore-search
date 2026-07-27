@@ -46,12 +46,9 @@ describe("passage BM25 search", () => {
     ).toBe(true);
   });
 
-  it("abstains when no meaningful query terms occur in the corpus", () => {
-    expect(
-      searchBm25(index, "vampire space station", {
-        limit: 10,
-        minimumMatchedTerms: 2,
-      }),
-    ).toEqual([]);
+  it("does not claim abstention for a partial lexical match", () => {
+    const results = searchBm25(index, "vampire space station", { limit: 10 });
+    expect(results.length).toBeGreaterThan(0);
+    expect(results[0].matchedTerms).toBe(1);
   });
 });

@@ -7,6 +7,7 @@ import {
   loadVerifiedCorpusRelease,
   parseJsonLines,
 } from "./lib/corpus-release.mjs";
+import { PRODUCTION_RETRIEVAL_OPTIONS } from "./lib/search-policy.mjs";
 
 const root = process.cwd();
 const benchmarkPath = path.join(root, "benchmarks/search-v0.1/queries.jsonl");
@@ -70,6 +71,7 @@ export async function runSearchBenchmark({
   writeReports = true,
   releaseRoot,
   lock,
+  search = searchBm25,
 } = {}) {
   const [queryContents, release] = await Promise.all([
     readFile(benchmarkPath, "utf8"),
@@ -98,10 +100,9 @@ export async function runSearchBenchmark({
 
   const runRecords = [];
   const perQuery = queries.map((query) => {
-    const allResults = searchBm25(index, query.query, {
+    const allResults = search(index, query.query, {
+      ...PRODUCTION_RETRIEVAL_OPTIONS,
       limit: documents.length,
-      uniqueDocuments: true,
-      minimumMatchedTerms: query.negative ? 2 : 1,
     });
     const results = allResults.slice(0, 20).map((result, index) => ({
       rank: index + 1,
@@ -185,10 +186,7 @@ export async function runSearchBenchmark({
     corpus: release.identity,
     retriever: {
       family: "BM25F",
-      titleWeight: 6,
-      textWeight: 1,
-      k1: 1.2,
-      b: 0.75,
+      ...PRODUCTION_RETRIEVAL_OPTIONS,
       unit: "passage",
       rankingView: "best passage per document",
     },
@@ -231,6 +229,9 @@ export async function runSearchBenchmark({
   if (writeReports) {
     await mkdir(reportRoot, { recursive: true });
     const failures = positives.filter((query) => !query.metrics.successAt10);
+    const negativeFailures = negatives.filter(
+      (query) => !query.metrics.abstained,
+    );
     await Promise.all([
       writeFile(
         path.join(reportRoot, "metrics.json"),
@@ -246,15 +247,24 @@ export async function runSearchBenchmark({
       ),
       writeFile(
         path.join(reportRoot, "failures.md"),
-        `# Search v0.1 failure analysis\n\n${
+        `# Search v0.1 failure analysis\n\n## Positive-query failures\n\n${
           failures.length
             ? failures
                 .map(
                   (query) =>
-                    `## ${query.id}: ${query.query}\n\n- Expected: ${query.judgments.map((judgment) => `${documentById.get(judgment.documentId)?.title} (${judgment.documentId})`).join(", ")}\n- Relevant rank: ${query.failureAnalysis?.targetRank ?? "not retrieved"}\n- Relevant passage: ${query.failureAnalysis?.targetPassageId ?? "none"}\n- Top result: ${query.results[0]?.title ?? "abstained"} (${query.results[0]?.passageId ?? "none"})\n- Query terms present in relevant passage: ${query.failureAnalysis?.matchedQueryTerms.join(", ") || "none"}\n- Query terms absent from relevant passage: ${query.failureAnalysis?.absentQueryTerms.join(", ") || "none"}\n\n**Diagnosis.** ${query.failureAnalysis?.diagnosis}\n\n**Relevant evidence.** ${query.failureAnalysis?.targetExcerpt ?? "No relevant passage entered the ranked set."}\n\n**Next experiment.** ${query.failureAnalysis?.nextExperiment}`,
+                    `### ${query.id}: ${query.query}\n\n- Expected: ${query.judgments.map((judgment) => `${documentById.get(judgment.documentId)?.title} (${judgment.documentId})`).join(", ")}\n- Relevant rank: ${query.failureAnalysis?.targetRank ?? "not retrieved"}\n- Relevant passage: ${query.failureAnalysis?.targetPassageId ?? "none"}\n- Top result: ${query.results[0]?.title ?? "abstained"} (${query.results[0]?.passageId ?? "none"})\n- Query terms present in relevant passage: ${query.failureAnalysis?.matchedQueryTerms.join(", ") || "none"}\n- Query terms absent from relevant passage: ${query.failureAnalysis?.absentQueryTerms.join(", ") || "none"}\n\n**Diagnosis.** ${query.failureAnalysis?.diagnosis}\n\n**Relevant evidence.** ${query.failureAnalysis?.targetExcerpt ?? "No relevant passage entered the ranked set."}\n\n**Next experiment.** ${query.failureAnalysis?.nextExperiment}`,
                 )
                 .join("\n\n")
             : "No positive query missed the top ten."
+        }\n\n## Negative-query failures\n\n${
+          negativeFailures.length
+            ? negativeFailures
+                .map(
+                  (query) =>
+                    `### ${query.id}: ${query.query}\n\n- Production-equivalent abstention outcome: did not abstain\n- Benchmark top-20 results: ${query.results.length}\n- Top result: ${query.results[0]?.title ?? "none"} (${query.results[0]?.passageId ?? "none"})\n- Matched terms: ${query.results[0]?.matchedTerms ?? 0}\n- Score: ${query.results[0]?.score ?? 0}\n\n**Diagnosis.** The lexical retriever has no calibrated abstention policy. A partial term match is enough to return a result.`,
+                )
+                .join("\n\n")
+            : "All negative probes abstained under production-equivalent retrieval."
         }\n`,
       ),
     ]);

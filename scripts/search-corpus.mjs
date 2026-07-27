@@ -3,6 +3,7 @@ import {
   loadVerifiedCorpusRelease,
   parseJsonLines,
 } from "./lib/corpus-release.mjs";
+import { PRODUCTION_RETRIEVAL_OPTIONS } from "./lib/search-policy.mjs";
 
 const query = process.argv.slice(2).join(" ").trim();
 if (!query) {
@@ -22,8 +23,8 @@ if (!query) {
     })),
   );
   const results = searchBm25(index, query, {
+    ...PRODUCTION_RETRIEVAL_OPTIONS,
     limit: 10,
-    uniqueDocuments: true,
   });
   console.log(
     JSON.stringify(

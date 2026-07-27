@@ -1,6 +1,8 @@
 # Search v0.1 failure analysis
 
-## theme-01: man happily trades away everything until he has nothing
+## Positive-query failures
+
+### theme-01: man happily trades away everything until he has nothing
 
 - Expected: Hans In Luck (fa:document:pg-2591:toc-002)
 - Relevant rank: 33
@@ -15,7 +17,7 @@
 
 **Next experiment.** Expand this failure slice with independently judged paraphrases, then compare a multilingual dense encoder and reciprocal-rank fusion against the frozen BM25F run.
 
-## theme-03: animal companion repeatedly warns hero against bad choices on quest
+### theme-03: animal companion repeatedly warns hero against bad choices on quest
 
 - Expected: The Golden Bird (fa:document:pg-2591:toc-001)
 - Relevant rank: not retrieved
@@ -29,3 +31,25 @@
 **Relevant evidence.** No relevant passage entered the ranked set.
 
 **Next experiment.** Expand this failure slice with independently judged paraphrases, then compare a multilingual dense encoder and reciprocal-rank fusion against the frozen BM25F run.
+
+## Negative-query failures
+
+### negative-01: vampire space station
+
+- Production-equivalent abstention outcome: did not abstain
+- Benchmark top-20 results: 10
+- Top result: The Bamboo-Cutter And The Moon-Child (fa:passage:pg-4018:toc-008:text-en:p0050)
+- Matched terms: 1
+- Score: 8.726659
+
+**Diagnosis.** The lexical retriever has no calibrated abstention policy. A partial term match is enough to return a result.
+
+### negative-02: Baba Yaga iron rocket
+
+- Production-equivalent abstention outcome: did not abstain
+- Benchmark top-20 results: 20
+- Top result: Iron Hans (fa:passage:pg-2591:toc-062:text-en:p0014)
+- Matched terms: 1
+- Score: 31.333862
+
+**Diagnosis.** The lexical retriever has no calibrated abstention policy. A partial term match is enough to return a result.

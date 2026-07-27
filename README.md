@@ -3,8 +3,10 @@
 Cited retrieval experiments over immutable Folklore Corpus releases.
 
 The checked v0.1 baseline is passage BM25F evaluated on 16 positive questions
-and two abstention probes. It scores nDCG@10 0.758 and succeeds on 14/16
-positive questions with exact passage citation integrity.
+and two negative probes. It scores nDCG@10 0.758 and succeeds on 14/16
+positive questions with exact passage citation integrity. Under the same
+configuration as interactive search it returns partial lexical matches for both
+negative probes, so its honest negative-abstention score is 0.0.
 
 The benchmark is intentionally too small to select a dense model. Its weak
 theme/paraphrase slice is the starting evidence for the next retrieval study.
