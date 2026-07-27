@@ -18,10 +18,12 @@
     "corpus:verify": "node scripts/verify-corpus-release.mjs",
     "search": "node scripts/search-corpus.mjs",
     "benchmark": "node scripts/run-search-benchmark.mjs",
+    "typecheck": "tsc --noEmit --strict --module NodeNext --moduleResolution NodeNext --target ES2022 tests/gateway-types.test-d.ts",
     "test": "vitest run",
-    "validate": "npm run corpus:verify && npm run benchmark && npm test"
+    "validate": "npm run corpus:verify && npm run benchmark && npm run typecheck && npm test"
   },
   "devDependencies": {
+    "typescript": "7.0.2",
     "vitest": "4.1.10"
   },
   "dependencies": {

@@ -3,7 +3,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import {
   loadVerifiedCorpusRelease,
   parseJsonLines,
-} from "../scripts/lib/corpus-release.mjs";
+} from "../src/corpus-release.mjs";
 import { createCorpusSearchIndex } from "../src/index.mjs";
 
 let documents: Map<string, Record<string, unknown>>;

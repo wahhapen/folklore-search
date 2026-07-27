@@ -6,7 +6,7 @@ import { tokenize } from "../src/bm25.mjs";
 import {
   loadVerifiedCorpusRelease,
   parseJsonLines,
-} from "./lib/corpus-release.mjs";
+} from "../src/corpus-release.mjs";
 import {
   createCorpusSearchIndex,
   PRODUCTION_RETRIEVAL_OPTIONS,

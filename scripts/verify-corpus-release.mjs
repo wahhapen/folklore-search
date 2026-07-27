@@ -4,7 +4,7 @@ import {
   hasActiveCorpusReleaseLock,
   loadVerifiedCorpusRelease,
   verifyCachedCorpusRelease,
-} from "./lib/corpus-release.mjs";
+} from "../src/corpus-release.mjs";
 
 const lockPath = path.resolve("corpus-release.lock.json");
 const hasActiveLock = await hasActiveCorpusReleaseLock(lockPath);

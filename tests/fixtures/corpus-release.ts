@@ -71,8 +71,11 @@ export function createCorpusReleaseFixture(
   overrides: {
     archiveEntries?: (entries: TarEntry[]) => TarEntry[];
     manifest?: (manifest: Record<string, unknown>) => Record<string, unknown>;
+    records?: Record<string, string>;
+    version?: string;
   } = {},
 ) {
+  const version = overrides.version ?? "0.2.0";
   const records = {
     "schema.json": `${JSON.stringify({
       $schema: "https://json-schema.org/draft/2020-12/schema",
@@ -89,7 +92,8 @@ export function createCorpusReleaseFixture(
     "witnesses.jsonl":
       '{"schemaVersion":"folklore-witness-v1","id":"fa:witness:test","documentId":"fa:document:test","text":"A test witness."}\n',
     "passages.jsonl":
-      '{"schemaVersion":"folklore-passage-v1","id":"fa:passage:test","documentId":"fa:document:test","witnessId":"fa:witness:test","ordinal":1,"text":"A test witness."}\n',
+      '{"schemaVersion":"folklore-passage-v1","id":"fa:passage:test","documentId":"fa:document:test","witnessId":"fa:witness:test","ordinal":1,"text":"A test witness.","citationLabel":"Test, passage 1"}\n',
+    ...overrides.records,
     "manifest.schema.json": `${JSON.stringify({
       $schema: "https://json-schema.org/draft/2020-12/schema",
       type: "object",
@@ -123,8 +127,8 @@ export function createCorpusReleaseFixture(
   });
   const baseManifest = {
     schemaVersion: "folklore-release-manifest-v1",
-    releaseId: "fa:release:corpus-v0.2.0",
-    version: "0.2.0",
+    releaseId: `fa:release:corpus-v${version}`,
+    version,
     publishedAt: "2026-07-25",
     producer: {
       repository: "wahhapen/folklore-corpus",
@@ -161,14 +165,15 @@ export function createCorpusReleaseFixture(
         schemaVersion: "folklore-corpus-lock-v1",
         source: {
           repository: "wahhapen/folklore-corpus",
-          tag: "corpus-v0.2.0",
-          asset: "folklore-corpus-v0.2.0.tar.gz",
+          tag: `corpus-v${version}`,
+          asset: `folklore-corpus-v${version}.tar.gz`,
           url,
         },
         archiveSha256: sha256(archive),
         manifestSha256: sha256(manifestBytes),
-        releaseId: "fa:release:corpus-v0.2.0",
-        version: "0.2.0",
+        producerCommit: "a".repeat(40),
+        releaseId: `fa:release:corpus-v${version}`,
+        version,
         manifestSchemaVersion: "folklore-release-manifest-v1",
       };
     },

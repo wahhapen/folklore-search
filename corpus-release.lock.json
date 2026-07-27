@@ -2,13 +2,14 @@
   "schemaVersion": "folklore-corpus-lock-v1",
   "source": {
     "repository": "wahhapen/folklore-corpus",
-    "tag": "corpus-v0.2.1",
-    "asset": "folklore-corpus-v0.2.1.tar.gz",
-    "url": "https://github.com/wahhapen/folklore-corpus/releases/download/corpus-v0.2.1/folklore-corpus-v0.2.1.tar.gz"
+    "tag": "corpus-v0.3.0",
+    "asset": "folklore-corpus-v0.3.0.tar.gz",
+    "url": "https://github.com/wahhapen/folklore-corpus/releases/download/corpus-v0.3.0/folklore-corpus-v0.3.0.tar.gz"
   },
-  "archiveSha256": "924c3ad6ecbec93e8e1a246895dc2e114beb5f3d40b73b71e02342892c8a82b0",
-  "manifestSha256": "d809fe8acf43642217af58c0e8ed9399740a0349a21064e40ae63eb3cd030bbd",
-  "releaseId": "fa:release:corpus-v0.2.1",
-  "version": "0.2.1",
-  "manifestSchemaVersion": "folklore-release-manifest-v1"
+  "archiveSha256": "39e559ec8a384158770ca01f6e687399a6aa497db80c7eb861342ce4ad998c4a",
+  "manifestSha256": "56322778649b863623a512fcaf64591bad68db0eb1f3edf56aec4d51df286380",
+  "releaseId": "fa:release:corpus-v0.3.0",
+  "version": "0.3.0",
+  "manifestSchemaVersion": "folklore-release-manifest-v1",
+  "producerCommit": "2721a94f5e318c6026a1b78ea97ca3514fe1ab10"
 }
