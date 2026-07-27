@@ -24,7 +24,8 @@ npm test
 ```
 
 `corpus-release.lock.json` pins the published Corpus v0.2.0 archive and enclosed
-manifest by SHA-256. The committed `.example` documents the lock format.
+manifest by SHA-256 for interactive search and current consumer verification.
+The committed `.example` documents the lock format.
 
 With an active lock, `corpus:fetch` downloads the exact archive into a
 same-filesystem staging directory, verifies the outer archive digest, enclosed
@@ -38,10 +39,12 @@ falling back to v0.1. Local reproduction may explicitly opt in with
 `FOLKLORE_ALLOW_LEGACY_CORPUS=1` or point `FOLKLORE_CORPUS_DIR` at a verified
 development release.
 
-The current v0.1 snapshot remains vendored only to reproduce the checked
-benchmark until the real v0.2 lock lands. Search resolves it without a
-versioned path literal and verifies every declared artifact before indexing.
-`FOLKLORE_CORPUS_DIR` remains an explicit legacy/development override.
+The historical `search-v0.1` benchmark is always evaluated against the
+vendored Corpus v0.1 release it was judged on: 170 Documents and 3,291 Passages,
+with an exact manifest identity. It refuses a different release or candidate
+universe even while interactive search consumes the newer locked Corpus.
+A separately versioned and re-judged benchmark will cover Corpus v0.2.x; these
+historical metrics must not be relabeled as v0.2.x results.
 
 The full transport and verification contract is in
 `docs/research/corpus-release-consumption-v0.2.md`.

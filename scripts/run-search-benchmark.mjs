@@ -12,6 +12,44 @@ import { PRODUCTION_RETRIEVAL_OPTIONS } from "./lib/search-policy.mjs";
 const root = process.cwd();
 const benchmarkPath = path.join(root, "benchmarks/search-v0.1/queries.jsonl");
 const reportRoot = path.join(root, "reports/search/search-v0.1");
+const historicalCorpusRoot = path.join(
+  root,
+  "data/derived/releases/corpus-v0.1.0",
+);
+const HISTORICAL_CORPUS = Object.freeze({
+  releaseId: "fa:release:corpus-v0.1.0",
+  version: "0.1.0",
+  manifestSha256:
+    "1e614c013f4ec9a21e574a17653c8430eee11ae95ba80cc099a7dc52c7f257ca",
+  documents: 170,
+  passages: 3291,
+});
+
+function assertHistoricalBenchmarkCorpus(release, documents, passages, queries) {
+  for (const field of ["releaseId", "version", "manifestSha256"]) {
+    if (release.identity[field] !== HISTORICAL_CORPUS[field]) {
+      throw new Error(
+        `Search v0.1 requires Corpus v0.1 identity; ${field} mismatch`,
+      );
+    }
+  }
+  if (
+    documents.length !== HISTORICAL_CORPUS.documents
+    || passages.length !== HISTORICAL_CORPUS.passages
+  ) {
+    throw new Error("Search v0.1 candidate universe does not match Corpus v0.1");
+  }
+  const documentIds = new Set(documents.map((document) => document.id));
+  for (const query of queries) {
+    for (const judgment of query.judgments) {
+      if (!documentIds.has(judgment.documentId)) {
+        throw new Error(
+          `Search v0.1 judgment is outside Corpus v0.1: ${judgment.documentId}`,
+        );
+      }
+    }
+  }
+}
 
 function mean(values) {
   return values.length
@@ -75,7 +113,10 @@ export async function runSearchBenchmark({
 } = {}) {
   const [queryContents, release] = await Promise.all([
     readFile(benchmarkPath, "utf8"),
-    loadVerifiedCorpusRelease({ releaseRoot, lock }),
+    loadVerifiedCorpusRelease({
+      releaseRoot: releaseRoot ?? historicalCorpusRoot,
+      lock,
+    }),
   ]);
   const passageContents = release.files.passages;
   const documentContents = release.files.documents;
@@ -84,6 +125,7 @@ export async function runSearchBenchmark({
   const passages = parseJsonLines(passageContents);
   const documents = parseJsonLines(documentContents);
   const witnesses = parseJsonLines(witnessContents);
+  assertHistoricalBenchmarkCorpus(release, documents, passages, queries);
   const documentById = new Map(
     documents.map((document) => [document.id, document]),
   );
@@ -184,6 +226,10 @@ export async function runSearchBenchmark({
   const metrics = {
     benchmark: "search-v0.1",
     corpus: release.identity,
+    candidateUniverse: {
+      documents: documents.length,
+      passages: passages.length,
+    },
     retriever: {
       family: "BM25F",
       ...PRODUCTION_RETRIEVAL_OPTIONS,
