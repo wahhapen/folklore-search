@@ -5,7 +5,7 @@
 ### theme-01: man happily trades away everything until he has nothing
 
 - Expected: Hans In Luck (fa:document:pg-2591:toc-002)
-- Relevant rank: 33
+- Relevant rank: 31
 - Relevant passage: fa:passage:pg-2591:toc-002:text-en:p0007
 - Top result: Nix Nought Nothing (fa:passage:pg-7439:toc-007:text-en:p0001)
 - Query terms present in relevant passage: man, away, he, has
@@ -40,7 +40,7 @@
 - Benchmark top-20 results: 10
 - Top result: The Bamboo-Cutter And The Moon-Child (fa:passage:pg-4018:toc-008:text-en:p0050)
 - Matched terms: 1
-- Score: 8.726659
+- Score: 8.416686
 
 **Diagnosis.** The lexical retriever has no calibrated abstention policy. A partial term match is enough to return a result.
 
@@ -50,6 +50,6 @@
 - Benchmark top-20 results: 20
 - Top result: Iron Hans (fa:passage:pg-2591:toc-062:text-en:p0014)
 - Matched terms: 1
-- Score: 31.333862
+- Score: 30.80516
 
 **Diagnosis.** The lexical retriever has no calibrated abstention policy. A partial term match is enough to return a result.
