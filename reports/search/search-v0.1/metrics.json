@@ -16,6 +16,8 @@
     "textWeight": 1,
     "k1": 1.2,
     "b": 0.75,
+    "minimumMatchedTerms": 1,
+    "uniqueDocuments": true,
     "unit": "passage",
     "rankingView": "best passage per document"
   },
@@ -26,7 +28,7 @@
   "successAt5": 0.875,
   "successAt10": 0.875,
   "recallAt20": 0.875,
-  "negativeAbstention": 1,
+  "negativeAbstention": 0,
   "citationIntegrity": 1,
   "categoryMetrics": {
     "title": {

@@ -3633,9 +3633,110 @@
       "successAt5": null,
       "successAt10": null,
       "recallAt20": null,
-      "abstained": true
+      "abstained": false
     },
-    "results": [],
+    "results": [
+      {
+        "rank": 1,
+        "passageId": "fa:passage:pg-4018:toc-008:text-en:p0050",
+        "documentId": "fa:document:pg-4018:toc-008",
+        "title": "The Bamboo-Cutter And The Moon-Child",
+        "score": 8.726659,
+        "matchedTerms": 1,
+        "citationLabel": "The Bamboo-Cutter And The Moon-Child, passage 50",
+        "excerpt": "The men returned and told His Majesty all that had passed. On the fifteenth day of that month the Emperor sent a guard of two thousand warriors to watch the house. One thousand stationed themselves on the roof, another thousand kept watch r"
+      },
+      {
+        "rank": 2,
+        "passageId": "fa:passage:pg-2591:toc-032:text-en:p0007",
+        "documentId": "fa:document:pg-2591:toc-032",
+        "title": "The Pink",
+        "score": 8.469107,
+        "matchedTerms": 1,
+        "citationLabel": "The Pink, passage 7",
+        "excerpt": "And he went with them and made them form a great circle, open at one end where he stationed himself, and began to wish. Two hundred deer and more came running inside the circle at once, and the huntsmen shot them. Then they were all placed "
+      },
+      {
+        "rank": 3,
+        "passageId": "fa:passage:pg-2591:toc-045:text-en:p0006",
+        "documentId": "fa:document:pg-2591:toc-045",
+        "title": "The Four Clever Brothers",
+        "score": 7.717036,
+        "matchedTerms": 1,
+        "citationLabel": "The Four Clever Brothers, passage 6",
+        "excerpt": "After the space of four years, at the time agreed upon, the four brothers met at the four cross-roads; and having welcomed each other, set off towards their father's home, where they told him all that had happened to them, and how each had "
+      },
+      {
+        "rank": 4,
+        "passageId": "fa:passage:pg-2591:toc-024:text-en:p0013",
+        "documentId": "fa:document:pg-2591:toc-024",
+        "title": "Tom Thumb",
+        "score": 7.203859,
+        "matchedTerms": 1,
+        "citationLabel": "Tom Thumb, passage 13",
+        "excerpt": "Though he made the best of his bad luck, he did not like his quarters at all; and the worst of it was, that more and more hay was always coming down, and the space left for him became smaller and smaller. At last he cried out as loud as he "
+      },
+      {
+        "rank": 5,
+        "passageId": "fa:passage:pg-2591:toc-041:text-en:p0010",
+        "documentId": "fa:document:pg-2591:toc-041",
+        "title": "The Turnip",
+        "score": 6.532504,
+        "matchedTerms": 1,
+        "citationLabel": "The Turnip, passage 10",
+        "excerpt": "The student listened to all this and wondered much; at last he said, 'Blessed be the day and hour when I found you; cannot you contrive to let me into the sack for a little while?' Then the other answered, as if very unwillingly, 'A little "
+      },
+      {
+        "rank": 6,
+        "passageId": "fa:passage:pg-4018:toc-001:text-en:p0003",
+        "documentId": "fa:document:pg-4018:toc-001",
+        "title": "My Lord Bag Of Rice",
+        "score": 5.455793,
+        "matchedTerms": 1,
+        "citationLabel": "My Lord Bag Of Rice, passage 3",
+        "excerpt": "He had only gone a few steps when he heard some one calling him from behind. On turning back he was much surprised to see that the monster dragon had entirely disappeared and in its place was a strange-looking man, who was bowing most cerem"
+      },
+      {
+        "rank": 7,
+        "passageId": "fa:passage:pg-2591:toc-003:text-en:p0001",
+        "documentId": "fa:document:pg-2591:toc-003",
+        "title": "Jorinda And Jorindel",
+        "score": 5.105187,
+        "matchedTerms": 1,
+        "citationLabel": "Jorinda And Jorindel, passage 1",
+        "excerpt": "There was once an old castle, that stood in the middle of a deep gloomy wood, and in the castle lived an old fairy. Now this fairy could take any shape she pleased. All the day long she flew about in the form of an owl, or crept about the c"
+      },
+      {
+        "rank": 8,
+        "passageId": "fa:passage:pg-1597:toc-004:text-en:p0047",
+        "documentId": "fa:document:pg-1597:toc-004",
+        "title": "The Shoes Of Fortune",
+        "score": 4.91565,
+        "matchedTerms": 1,
+        "citationLabel": "The Shoes Of Fortune, passage 47",
+        "excerpt": "As to ourselves, we all know the speed produced by the employment of steam; we have experienced it either on railroads, or in boats when crossing the sea; but such a flight is like the travelling of a sloth in comparison with the velocity w"
+      },
+      {
+        "rank": 9,
+        "passageId": "fa:passage:pg-7885:toc-013:text-en:p0029",
+        "documentId": "fa:document:pg-7885:toc-013",
+        "title": "The Wooing Of Olwen",
+        "score": 4.611294,
+        "matchedTerms": 1,
+        "citationLabel": "The Wooing Of Olwen, passage 29",
+        "excerpt": "When they came to the eagle, Gwrhyr asked it the same question; but it replied, \"I have been here for a great space of time, and when I first came hither there was a rock here, from the top of which I pecked at the stars every evening, and "
+      },
+      {
+        "rank": 10,
+        "passageId": "fa:passage:pg-1597:toc-006:text-en:p0024",
+        "documentId": "fa:document:pg-1597:toc-006",
+        "title": "The Snow Queen",
+        "score": 4.472824,
+        "matchedTerms": 1,
+        "citationLabel": "The Snow Queen, passage 24",
+        "excerpt": "Kay looked at her. She was very beautiful; a more clever, or a more lovely countenance he could not fancy to himself; and she no longer appeared of ice as before, when she sat outside the window, and beckoned to him; in his eyes she was per"
+      }
+    ],
     "failureAnalysis": null
   },
   {
@@ -3651,9 +3752,210 @@
       "successAt5": null,
       "successAt10": null,
       "recallAt20": null,
-      "abstained": true
+      "abstained": false
     },
-    "results": [],
+    "results": [
+      {
+        "rank": 1,
+        "passageId": "fa:passage:pg-2591:toc-062:text-en:p0014",
+        "documentId": "fa:document:pg-2591:toc-062",
+        "title": "Iron Hans",
+        "score": 31.333862,
+        "matchedTerms": 1,
+        "citationLabel": "Iron Hans, passage 14",
+        "excerpt": "Then the wild man went back into the forest, and it was not long before a stable-boy came out of it, who led a horse that snorted with its nostrils, and could hardly be restrained, and behind them followed a great troop of warriors entirely"
+      },
+      {
+        "rank": 2,
+        "passageId": "fa:passage:pg-7885:toc-015:text-en:p0022",
+        "documentId": "fa:document:pg-7885:toc-015",
+        "title": "The Shee An Gannon And The Gruagach Gaire",
+        "score": 6.75961,
+        "matchedTerms": 1,
+        "citationLabel": "The Shee An Gannon And The Gruagach Gaire, passage 22",
+        "excerpt": "In the morning the master of the house went into the next room, took down the twelve iron loops with a wooden one, brought them out, and asked the cowboy which would he take, the twelve iron or the one wooden loop. \"What could I do with the"
+      },
+      {
+        "rank": 3,
+        "passageId": "fa:passage:pg-2591:toc-053:text-en:p0004",
+        "documentId": "fa:document:pg-2591:toc-053",
+        "title": "The King Of The Golden Mountain",
+        "score": 6.009856,
+        "matchedTerms": 1,
+        "citationLabel": "The King Of The Golden Mountain, passage 4",
+        "excerpt": "About a month afterwards he went upstairs into a lumber-room to look for some old iron, that he might sell it and raise a little money; and there, instead of his iron, he saw a large pile of gold lying on the floor. At the sight of this he "
+      },
+      {
+        "rank": 4,
+        "passageId": "fa:passage:pg-1597:toc-013:text-en:p0005",
+        "documentId": "fa:document:pg-1597:toc-013",
+        "title": "The False Collar",
+        "score": 5.894608,
+        "matchedTerms": 1,
+        "citationLabel": "The False Collar, passage 5",
+        "excerpt": "\"Prude!\" exclaimed the collar; and then it was taken out of the washing-tub. It was starched, hung over the back of a chair in the sunshine, and was then laid on the ironing-blanket; then came the warm box-iron. \"Dear lady!\" said the collar"
+      },
+      {
+        "rank": 5,
+        "passageId": "fa:passage:pg-7439:toc-015:text-en:p0001",
+        "documentId": "fa:document:pg-7439:toc-015",
+        "title": "The Master And His Pupil",
+        "score": 5.762704,
+        "matchedTerms": 1,
+        "citationLabel": "The Master And His Pupil, passage 1",
+        "excerpt": "There was once a very learned man in the north-country who knew all the languages under the sun, and who was acquainted with all the mysteries of creation. He had one big book bound in black calf and clasped with iron, and with iron corners"
+      },
+      {
+        "rank": 6,
+        "passageId": "fa:passage:pg-7439:toc-032:text-en:p0008",
+        "documentId": "fa:document:pg-7439:toc-032",
+        "title": "The Strange Visitor",
+        "score": 5.697928,
+        "matchedTerms": 1,
+        "citationLabel": "The Strange Visitor, passage 8",
+        "excerpt": "\"With carrying broom, with carrying broom\" (_gruffly_). \"How did you get such small small arms?\" \"Aih-h-h!--late--and wee-e-e--moul\" (_whiningly_.) \"How did you get such huge huge hands?\" \"Threshing with an iron flail, threshing with an iro"
+      },
+      {
+        "rank": 7,
+        "passageId": "fa:passage:pg-2591:toc-051:text-en:p0007",
+        "documentId": "fa:document:pg-2591:toc-051",
+        "title": "The Water Of Life",
+        "score": 5.494238,
+        "matchedTerms": 1,
+        "citationLabel": "The Water Of Life, passage 7",
+        "excerpt": "The water you seek springs from a well in an enchanted castle; and, that you may be able to reach it in safety, I will give you an iron wand and two little loaves of bread; strike the iron door of the castle three times with the wand, and i"
+      },
+      {
+        "rank": 8,
+        "passageId": "fa:passage:pg-4018:toc-021:text-en:p0008",
+        "documentId": "fa:document:pg-4018:toc-021",
+        "title": "The Stones Of Five Colors And The Empress Jokwa",
+        "score": 5.286362,
+        "matchedTerms": 1,
+        "citationLabel": "The Stones Of Five Colors And The Empress Jokwa, passage 8",
+        "excerpt": "As the two young warriors saw him tearing down upon them, they said to each other: \"We must not let him escape alive,\" and they attacked him from the right and from the left with sword and with lance. But the all-powerful Kokai was not to b"
+      },
+      {
+        "rank": 9,
+        "passageId": "fa:passage:pg-7439:toc-019:text-en:p0020",
+        "documentId": "fa:document:pg-7439:toc-019",
+        "title": "Jack The Giant-Killer",
+        "score": 5.033016,
+        "matchedTerms": 1,
+        "citationLabel": "Jack The Giant-Killer, passage 20",
+        "excerpt": "Jack soon went searching for giants again, but he had not ridden far, when he saw a cave, near the entrance of which he beheld a giant sitting upon a block of timber, with a knotted iron club by his side. His goggle eyes were like flames of"
+      },
+      {
+        "rank": 10,
+        "passageId": "fa:passage:pg-4018:toc-018:text-en:p0045",
+        "documentId": "fa:document:pg-4018:toc-018",
+        "title": "Momotaro, Or The Story Of The Son Of A Peach",
+        "score": 4.930247,
+        "matchedTerms": 1,
+        "citationLabel": "Momotaro, Or The Story Of The Son Of A Peach, passage 45",
+        "excerpt": "The horned demons looking up and only seeing a pheasant, laughed and said: \"A wild pheasant, indeed! It is ridiculous to hear such words from a mean thing like you. Wait till you get a blow from one of our iron bars!\" Very angry, indeed, we"
+      },
+      {
+        "rank": 11,
+        "passageId": "fa:passage:pg-4018:toc-004:text-en:p0027",
+        "documentId": "fa:document:pg-4018:toc-004",
+        "title": "The Farmer And The Badger",
+        "score": 4.82052,
+        "matchedTerms": 1,
+        "citationLabel": "The Farmer And The Badger, passage 27",
+        "excerpt": "Kotei in time grew to manhood and succeeded his father the Emperor Yuhi. His early reign was greatly troubled by the rebel Shiyu. This rebel wanted to make himself King, and many were the battles which he fought to this end. Shiyu was a wic"
+      },
+      {
+        "rank": 12,
+        "passageId": "fa:passage:pg-7885:toc-013:text-en:p0016",
+        "documentId": "fa:document:pg-7885:toc-013",
+        "title": "The Wooing Of Olwen",
+        "score": 4.617753,
+        "matchedTerms": 1,
+        "citationLabel": "The Wooing Of Olwen, passage 16",
+        "excerpt": "But Menw caught it and flung it back, piercing Yspathaden's breast with it, so that it came out at the small of his back. \"A cursed ungentle son-in-law, truly,\" says he, \"the hard iron pains me like the bite of a horse-leech. Cursed be the "
+      },
+      {
+        "rank": 13,
+        "passageId": "fa:passage:pg-1597:toc-010:text-en:p0007",
+        "documentId": "fa:document:pg-1597:toc-010",
+        "title": "The Old House",
+        "score": 4.59017,
+        "matchedTerms": 1,
+        "citationLabel": "The Old House, passage 7",
+        "excerpt": "And the brass balls on the iron railings shone much brighter than ever; one would have thought they were polished on account of the visit; and it was as if the carved-out trumpeters--for there were trumpeters, who stood in tulips, carved ou"
+      },
+      {
+        "rank": 14,
+        "passageId": "fa:passage:pg-1597:toc-004:text-en:p0059",
+        "documentId": "fa:document:pg-1597:toc-004",
+        "title": "The Shoes Of Fortune",
+        "score": 4.380831,
+        "matchedTerms": 1,
+        "citationLabel": "The Shoes Of Fortune, passage 59",
+        "excerpt": "The extensive building is separated from the street by a pretty high railing, the thick iron bars of which are so far apart, that in all seriousness, it is said, some very thin fellow had of a night occasionally squeezed himself through to "
+      },
+      {
+        "rank": 15,
+        "passageId": "fa:passage:pg-2591:toc-040:text-en:p0005",
+        "documentId": "fa:document:pg-2591:toc-040",
+        "title": "The Juniper-Tree",
+        "score": 4.380831,
+        "matchedTerms": 1,
+        "citationLabel": "The Juniper-Tree, passage 5",
+        "excerpt": "One day the little daughter came running to her mother in the store-room, and said, 'Mother, give me an apple.' 'Yes, my child,' said the wife, and she gave her a beautiful apple out of the chest; the chest had a very heavy lid and a large "
+      },
+      {
+        "rank": 16,
+        "passageId": "fa:passage:pg-4018:toc-002:text-en:p0006",
+        "documentId": "fa:document:pg-4018:toc-002",
+        "title": "The Tongue-Cut Sparrow",
+        "score": 4.122326,
+        "matchedTerms": 1,
+        "citationLabel": "The Tongue-Cut Sparrow, passage 6",
+        "excerpt": "\"I suppose you took my starch with that tongue! Now you may see what it is like to go without it!\" And with these dreadful words she drove the bird away, not caring in the least what might happen to it and without the smallest pity for its "
+      },
+      {
+        "rank": 17,
+        "passageId": "fa:passage:pg-7885:toc-026:text-en:p0023",
+        "documentId": "fa:document:pg-7885:toc-026",
+        "title": "The Lad With The Goat-Skin",
+        "score": 4.014646,
+        "matchedTerms": 1,
+        "citationLabel": "The Lad With The Goat-Skin, passage 23",
+        "excerpt": "\"Well,\" says the other, \"the Danes is much better customers to me; but since you walked so far I won't refuse. Hand that flail,\" says he to a young imp; and he winked the far-off eye at the same time. So, while some were barring the gates, "
+      },
+      {
+        "rank": 18,
+        "passageId": "fa:passage:pg-4018:toc-017:text-en:p0014",
+        "documentId": "fa:document:pg-4018:toc-017",
+        "title": "The Story Of Prince Yamato Take",
+        "score": 3.952697,
+        "matchedTerms": 1,
+        "citationLabel": "The Story Of Prince Yamato Take, passage 14",
+        "excerpt": "This was the moment for which the brave Prince had been waiting. Flinging down the wine jar, he seized the tipsy and astonished Kumaso and quickly stabbed him to death with the dagger which he had secretly carried hidden in his breast. Take"
+      },
+      {
+        "rank": 19,
+        "passageId": "fa:passage:pg-1597:toc-015:text-en:p0005",
+        "documentId": "fa:document:pg-1597:toc-015",
+        "title": "The Little Match Girl",
+        "score": 3.518365,
+        "matchedTerms": 1,
+        "citationLabel": "The Little Match Girl, passage 5",
+        "excerpt": "Her little hands were almost numbed with cold. Oh! a match might afford her a world of comfort, if she only dared take a single one out of the bundle, draw it against the wall, and warm her fingers by it. She drew one out. \"Rischt!\" how it "
+      },
+      {
+        "rank": 20,
+        "passageId": "fa:passage:pg-4018:toc-019:text-en:p0015",
+        "documentId": "fa:document:pg-4018:toc-019",
+        "title": "The Ogre Of Rashomon",
+        "score": 3.379125,
+        "matchedTerms": 1,
+        "citationLabel": "The Ogre Of Rashomon, passage 15",
+        "excerpt": "When he got back, he showed the arm to his comrades, who one and all called him the hero of their band and gave him a great feast. His wonderful deed was soon noised abroad in Kyoto, and people from far and near came to see the ogre's arm. "
+      }
+    ],
     "failureAnalysis": null
   }
 ]

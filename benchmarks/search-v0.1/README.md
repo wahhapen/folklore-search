@@ -19,3 +19,8 @@ Before model selection, expand to at least 50 independently reviewed queries,
 add passage-level graded judgments and reviewer metadata, and include explicit
 variant, multilingual, misspelling, and source-view checks. Preserve v0.1 as a
 frozen historical run rather than silently rewriting its scores.
+
+The two negative probes use exactly the same retrieval policy as interactive
+search. This lexical baseline has no calibrated abstention layer and returns a
+partial match for both probes; the committed negative-abstention score is
+therefore 0.0.
