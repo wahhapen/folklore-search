@@ -83,6 +83,19 @@ function normalizedTf(frequency, length, averageLength, k1, b) {
   );
 }
 
+function matchesExactFilters(record, filters) {
+  const metadata = record.metadata ?? {};
+  return Object.entries(filters).every(([field, expected]) => {
+    if (!Object.hasOwn(metadata, field) || metadata[field] === undefined) {
+      return false;
+    }
+    const acceptedValues = Array.isArray(expected) ? expected : [expected];
+    return acceptedValues.some(
+      (value) => value !== undefined && Object.is(metadata[field], value),
+    );
+  });
+}
+
 export function searchBm25(
   index,
   query,
@@ -94,6 +107,7 @@ export function searchBm25(
     b = 0.75,
     minimumMatchedTerms = 1,
     uniqueDocuments = false,
+    filters = {},
   } = {},
 ) {
   const queryTerms = [...new Set(tokenize(query))];
@@ -102,8 +116,10 @@ export function searchBm25(
   const results = [];
 
   for (const document of index.documents) {
+    if (!matchesExactFilters(document.record, filters)) continue;
     let score = 0;
     let matchedTerms = 0;
+    const termContributions = [];
     for (const term of queryTerms) {
       const titleFrequency = document.titleTerms.get(term) ?? 0;
       const textFrequency = document.textTerms.get(term) ?? 0;
@@ -111,40 +127,74 @@ export function searchBm25(
       matchedTerms += 1;
       const frequency = index.documentFrequency.get(term) ?? 0;
       const idf = Math.log(1 + (count - frequency + 0.5) / (frequency + 0.5));
-      score +=
+      const titleContribution =
         idf *
-        (titleWeight *
-          normalizedTf(
-            titleFrequency,
-            document.titleLength,
-            index.averageTitleLength,
-            k1,
-            b,
-          ) +
-          textWeight *
-            normalizedTf(
-              textFrequency,
-              document.textLength,
-              index.averageTextLength,
-              k1,
-              b,
-            ));
+        titleWeight *
+        normalizedTf(
+          titleFrequency,
+          document.titleLength,
+          index.averageTitleLength,
+          k1,
+          b,
+        );
+      const textContribution =
+        idf *
+        textWeight *
+        normalizedTf(
+          textFrequency,
+          document.textLength,
+          index.averageTextLength,
+          k1,
+          b,
+        );
+      const termScore = titleContribution + textContribution;
+      score += termScore;
+      termContributions.push({
+        term,
+        title: titleContribution,
+        text: textContribution,
+        total: termScore,
+      });
     }
     if (matchedTerms >= minimumMatchedTerms) {
-      results.push({ ...document.record, score, matchedTerms });
+      results.push({
+        ...document.record,
+        score,
+        matchedTerms,
+        explanation: {
+          matchedQueryTerms: termContributions.map(({ term }) => term),
+          score: {
+            total: score,
+            fields: {
+              title: termContributions.reduce(
+                (total, term) => total + term.title,
+                0,
+              ),
+              text: termContributions.reduce(
+                (total, term) => total + term.text,
+                0,
+              ),
+            },
+            terms: termContributions,
+          },
+        },
+      });
     }
   }
 
   results.sort(
-    (left, right) => right.score - left.score || left.id.localeCompare(right.id),
+    (left, right) =>
+      right.score - left.score ||
+      (left.id < right.id ? -1 : left.id > right.id ? 1 : 0),
   );
   if (!uniqueDocuments) return results.slice(0, limit);
 
   const seen = new Set();
   return results
     .filter((result) => {
-      if (seen.has(result.documentId)) return false;
-      seen.add(result.documentId);
+      const documentIdentity = result.documentId ?? result.id;
+      if (seen.has(documentIdentity)) return false;
+      seen.add(documentIdentity);
       return true;
     })
     .slice(0, limit);
