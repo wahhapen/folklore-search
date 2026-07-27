@@ -48,3 +48,43 @@ historical metrics must not be relabeled as v0.2.x results.
 
 The full transport and verification contract is in
 `docs/research/corpus-release-consumption-v0.2.md`.
+
+## Importable BM25F module
+
+The same in-process implementation used by the CLI and benchmark is available
+through the package root:
+
+```js
+import { createCorpusSearchIndex } from "folklore-search";
+
+const index = createCorpusSearchIndex({ documents, passages });
+const results = index.search("children leave bread crumbs", {
+  limit: 10,
+  filters: {
+    language: "en",
+    representedRegion: ["Nordic Europe", "Northern Europe"],
+  },
+});
+```
+
+`createSearchIndex(records)` is the lower-level seam for callers that already
+have search records containing `id`, `title`, `text`, citation fields, and a
+flat `metadata` object. Both constructors use the production BM25F policy by
+default, including one best passage per document. A caller may override an
+individual query option explicitly; the complete frozen defaults are exported
+as `PRODUCTION_RETRIEVAL_OPTIONS`.
+
+Metadata filters have explicit exact-match semantics:
+
+- different fields are combined with AND;
+- an array of accepted values within one field uses OR;
+- values are compared case-sensitively without normalization;
+- a missing field or an empty accepted-values array does not match;
+- filters determine candidate eligibility before document deduplication and
+  result limiting, while BM25F statistics remain those of the complete index.
+
+Every result preserves the source record and adds `score`, `matchedTerms`, and
+a machine-readable `explanation`. The explanation lists matched normalized
+query terms and the actual additive title/text contribution computed for each
+term. Scores are retrieval diagnostics, not probabilities, evidence quality,
+or claims of cultural authority.

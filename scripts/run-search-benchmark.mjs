@@ -2,12 +2,15 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-import { buildBm25Index, searchBm25, tokenize } from "./lib/bm25.mjs";
+import { tokenize } from "../src/bm25.mjs";
 import {
   loadVerifiedCorpusRelease,
   parseJsonLines,
 } from "./lib/corpus-release.mjs";
-import { PRODUCTION_RETRIEVAL_OPTIONS } from "./lib/search-policy.mjs";
+import {
+  createCorpusSearchIndex,
+  PRODUCTION_RETRIEVAL_OPTIONS,
+} from "../src/index.mjs";
 
 const root = process.cwd();
 const benchmarkPath = path.join(root, "benchmarks/search-v0.1/queries.jsonl");
@@ -109,7 +112,6 @@ export async function runSearchBenchmark({
   writeReports = true,
   releaseRoot,
   lock,
-  search = searchBm25,
 } = {}) {
   const [queryContents, release] = await Promise.all([
     readFile(benchmarkPath, "utf8"),
@@ -133,19 +135,11 @@ export async function runSearchBenchmark({
   const witnessById = new Map(
     witnesses.map((witness) => [witness.id, witness]),
   );
-  const index = buildBm25Index(
-    passages.map((passage) => ({
-      ...passage,
-      title: documentById.get(passage.documentId)?.title ?? "",
-    })),
-  );
+  const index = createCorpusSearchIndex({ documents, passages });
 
   const runRecords = [];
   const perQuery = queries.map((query) => {
-    const allResults = search(index, query.query, {
-      ...PRODUCTION_RETRIEVAL_OPTIONS,
-      limit: documents.length,
-    });
+    const allResults = index.search(query.query, { limit: documents.length });
     const results = allResults.slice(0, 20).map((result, index) => ({
       rank: index + 1,
       passageId: result.id,
