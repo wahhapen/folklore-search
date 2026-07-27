@@ -171,7 +171,8 @@ Search commits one human-reviewable file, recommended at
   "manifestSha256": "<64 lowercase hex characters>",
   "releaseId": "fa:release:corpus-v0.2.0",
   "version": "0.2.0",
-  "manifestSchemaVersion": "folklore-release-manifest-v1"
+  "manifestSchemaVersion": "folklore-release-manifest-v1",
+  "producerCommit": "<40 lowercase hex characters>"
 }
 ```
 
@@ -180,9 +181,10 @@ the GitHub API. An update is an ordinary reviewed commit changing this file.
 The same shape can be copied into ML Lab without sharing implementation code or
 introducing a package registry.
 
-The URL is transport metadata, not identity. The two digests and release ID are
-identity and integrity metadata. A mirror may therefore replace the URL in a
-future lock revision without changing the expected release.
+The URL is transport metadata, not identity. The two digests, release ID, and
+producer commit are identity and integrity metadata. A mirror may therefore
+replace the URL in a future lock revision without changing the expected
+release.
 
 ## Verification and installation algorithm
 

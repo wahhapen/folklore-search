@@ -1,4 +1,4 @@
-import { installCorpusRelease } from "./lib/corpus-release.mjs";
+import { installCorpusRelease } from "../src/corpus-release.mjs";
 
 const unsupported = process.argv
   .slice(2)

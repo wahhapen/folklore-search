@@ -4,7 +4,7 @@ import { join, resolve } from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { loadVerifiedCorpusRelease } from "../scripts/lib/corpus-release.mjs";
+import { loadVerifiedCorpusRelease } from "../src/corpus-release.mjs";
 
 describe("Corpus Release consumer boundary", () => {
   const temporaryDirectories: string[] = [];

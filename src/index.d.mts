@@ -78,3 +78,125 @@ export function createCorpusSearchIndex(options: {
   documents: readonly SearchRecord[];
   passages: readonly SearchRecord[];
 }): SearchIndex<SearchRecord>;
+
+export interface CorpusReleaseIdentity {
+  readonly releaseId: string;
+  readonly version: "0.3.0";
+  readonly manifestSchemaVersion: string;
+  readonly manifestSha256: string;
+  readonly archiveSha256: string;
+  readonly sourceRepository: string;
+  readonly sourceTag: string;
+  readonly sourceAsset: string;
+  readonly producerCommit: string;
+}
+
+export interface CorpusRecord {
+  readonly schemaVersion: string;
+  readonly id: string;
+  readonly [key: string]: unknown;
+}
+
+export interface CorpusDocumentRecord extends SearchRecord {
+  readonly schemaVersion: string;
+  readonly id: string;
+  readonly title?: string;
+}
+
+export interface CorpusWitnessRecord extends CorpusRecord {
+  readonly documentId: string;
+  readonly text?: string;
+}
+
+export interface CorpusPassageRecord extends SearchRecord {
+  readonly schemaVersion: string;
+  readonly id: string;
+  readonly documentId: string;
+  readonly witnessId: string;
+  readonly text: string;
+  readonly citationLabel?: string;
+}
+
+export interface CorpusRepresentationRecord extends CorpusRecord {
+  readonly witnessId: string;
+  readonly kind: string;
+  readonly language: string;
+  readonly artifactId?: string;
+}
+
+export interface CorpusDerivationRecord extends CorpusRecord {
+  readonly type: string | null;
+  readonly inputIds: readonly string[];
+  readonly outputIds: readonly string[];
+}
+
+export type TranslationProducerClass =
+  | "source-published"
+  | "expert-produced"
+  | "user-produced"
+  | "machine-generated";
+
+export type ReviewStatus =
+  | "unreviewed"
+  | "accepted"
+  | "rejected"
+  | "superseded";
+
+export interface CorpusTranslationRecord extends CorpusRecord {
+  readonly schemaVersion: "folklore-translation-v1";
+  readonly translationRepresentationId: string;
+  readonly sourceRepresentationId: string;
+  readonly producerClass: TranslationProducerClass;
+  readonly reviewStatus: ReviewStatus;
+  readonly reviewedById: string | null;
+  readonly reviewEvidenceArtifactId: string | null;
+  readonly metadata?: Readonly<Record<string, unknown>>;
+}
+
+export type RightsDecision = boolean | null;
+
+export interface CorpusRightsAssessmentRecord extends CorpusRecord {
+  readonly schemaVersion: "folklore-rights-assessment-v2";
+  readonly subjectId: string;
+  readonly rightsSource: string;
+  readonly attributionText: string;
+  readonly evidenceUseAllowed: RightsDecision;
+  readonly quotationAllowed: RightsDecision;
+  readonly redistributionAllowed: RightsDecision;
+  readonly accessPrivateUseAllowed: RightsDecision;
+  readonly mlEvaluationAllowed: RightsDecision;
+  readonly mlTrainingAllowed: RightsDecision;
+  readonly derivativesAllowed?: RightsDecision;
+  readonly jurisdiction: string;
+  readonly reviewedOn: string;
+  readonly reviewState: ReviewStatus;
+  readonly evidenceArtifactId: string;
+}
+
+export interface CorpusGatewayRecords {
+  readonly documents: readonly CorpusDocumentRecord[];
+  readonly witnesses: readonly CorpusWitnessRecord[];
+  readonly passages: readonly CorpusPassageRecord[];
+  readonly representations: readonly CorpusRepresentationRecord[];
+  readonly derivations: readonly CorpusDerivationRecord[];
+  readonly translations: readonly CorpusTranslationRecord[];
+  readonly rightsAssessments: readonly CorpusRightsAssessmentRecord[];
+}
+
+export interface CorpusSearchGateway {
+  readonly release: CorpusReleaseIdentity;
+  readonly manifest: Readonly<Record<string, unknown>>;
+  readonly records: CorpusGatewayRecords;
+  readonly index: SearchIndex<CorpusPassageRecord>;
+}
+
+export interface CorpusGatewayOptions {
+  lockPath?: string;
+  cacheRoot?: string;
+  offline?: boolean;
+  fetchImpl?: typeof fetch;
+}
+
+export function loadCorpusSearchGateway(
+  options?: CorpusGatewayOptions,
+): Promise<CorpusSearchGateway>;

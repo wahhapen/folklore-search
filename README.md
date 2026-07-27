@@ -23,8 +23,9 @@ npm run benchmark
 npm test
 ```
 
-`corpus-release.lock.json` pins the published Corpus v0.2.0 archive and enclosed
-manifest by SHA-256 for interactive search and current consumer verification.
+`corpus-release.lock.json` pins the published Corpus v0.3.0 archive, producer
+commit, and enclosed manifest by SHA-256 for interactive search and current
+consumer verification.
 The committed `.example` documents the lock format.
 
 With an active lock, `corpus:fetch` downloads the exact archive into a
@@ -48,6 +49,35 @@ historical metrics must not be relabeled as v0.2.x results.
 
 The full transport and verification contract is in
 `docs/research/corpus-release-consumption-v0.2.md`.
+
+## Verified Corpus gateway
+
+Server-side consumers can install or reuse the exact locked Corpus v0.3.0
+release and construct the production search index through one package import:
+
+```js
+import { loadCorpusSearchGateway } from "folklore-search";
+
+const gateway = await loadCorpusSearchGateway();
+const results = gateway.index.search("children leave bread crumbs", {
+  limit: 10,
+  filters: { language: "en" },
+});
+```
+
+The default lock is package-owned, so the consumer does not need to copy a lock
+or depend on its process working directory.
+
+The promise resolves only after the archive, manifest, producer identity,
+manifest schema (including its shipped schema dependency), and every declared
+artifact have passed verification. The returned `records` preserve Documents,
+Witnesses, Passages, Representations, Derivations, Rights Contract v2
+assessments, and translation provenance/review records. `offline: true` forbids
+network access and requires the exact verified cache entry to exist.
+
+The interactive CLI uses this gateway. The historical benchmark continues to
+load its separately verified and digest-frozen Corpus v0.1 universe, while
+sharing the same production BM25F constructor and ranking policy.
 
 ## Importable BM25F module
 

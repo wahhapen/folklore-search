@@ -17,7 +17,7 @@ import {
   cacheEntryPath,
   installCorpusRelease,
   resolveCorpusRelease,
-} from "../scripts/lib/corpus-release.mjs";
+} from "../src/corpus-release.mjs";
 import { runSearchBenchmark } from "../scripts/run-search-benchmark.mjs";
 import {
   createCorpusReleaseFixture,
@@ -102,8 +102,28 @@ describe("digest-pinned Corpus Release installer", () => {
       sourceRepository: "wahhapen/folklore-corpus",
       sourceTag: "corpus-v0.2.0",
       sourceAsset: "folklore-corpus-v0.2.0.tar.gz",
+      producerCommit: "a".repeat(40),
     });
     expect(requests).toBe(1);
+  });
+
+  it("continues to accept a producer-less v1 lock", async () => {
+    const fixture = createCorpusReleaseFixture();
+    const { url } = await serve((_request, response) => {
+      response.end(fixture.archive);
+    });
+    const root = await temporaryRoot();
+    const lock = fixture.lock(url);
+    delete (lock as { producerCommit?: string }).producerCommit;
+    const lockPath = await writeLock(root, lock);
+
+    const release = await installCorpusRelease({
+      lockPath,
+      cacheRoot: join(root, "cache"),
+    });
+
+    expect(release.identity).not.toHaveProperty("producerCommit");
+    expect(release.identity.version).toBe("0.2.0");
   });
 
   it("refuses the current locked release as the historical benchmark universe", async () => {
@@ -232,6 +252,17 @@ describe("digest-pinned Corpus Release installer", () => {
         },
       }),
       "producer repository disagrees with lock",
+    ],
+    [
+      "producer commit",
+      (manifest: Record<string, unknown>) => ({
+        ...manifest,
+        producer: {
+          ...(manifest.producer as Record<string, unknown>),
+          commit: "b".repeat(40),
+        },
+      }),
+      "producer commit disagrees with lock",
     ],
   ])(
     "rejects a locked archive with the wrong %s",

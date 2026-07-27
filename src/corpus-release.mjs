@@ -15,18 +15,30 @@ import { homedir, platform } from "node:os";
 import path from "node:path";
 import { Readable, Transform } from "node:stream";
 import { pipeline } from "node:stream/promises";
+import { fileURLToPath } from "node:url";
 
 import Ajv2020 from "ajv/dist/2020.js";
 import { t as listTar, x as extractTar } from "tar";
 
 const LOCK_SCHEMA_VERSION = "folklore-corpus-lock-v1";
-const ACTIVE_LOCK_PATH = "corpus-release.lock.json";
+const ACTIVE_LOCK_PATH = fileURLToPath(
+  new URL("../corpus-release.lock.json", import.meta.url),
+);
 const REQUIRED_FILE_PATHS = {
   schema: "schema.json",
   documents: "documents.jsonl",
   witnesses: "witnesses.jsonl",
   passages: "passages.jsonl",
 };
+export const CORPUS_GATEWAY_RECORD_FILE_PATHS = Object.freeze({
+  representations: "representations.jsonl",
+  derivations: "derivations.jsonl",
+  translations: "translations.jsonl",
+  rightsAssessments: "rights.jsonl",
+});
+const OPTIONAL_SCHEMA_FILE_PATHS = [
+  "corpus-release-v2.schema.json",
+];
 const REQUIRED_ARTIFACTS = new Set([
   ...Object.values(REQUIRED_FILE_PATHS),
   "manifest.schema.json",
@@ -69,19 +81,19 @@ export function validateCorpusReleaseLock(lock) {
   if (!lock || typeof lock !== "object" || Array.isArray(lock)) {
     throw new Error("Corpus Release lock must be a JSON object");
   }
-  assertExactKeys(
-    lock,
-    [
-      "schemaVersion",
-      "source",
-      "archiveSha256",
-      "manifestSha256",
-      "releaseId",
-      "version",
-      "manifestSchemaVersion",
-    ],
-    "Corpus Release lock",
-  );
+  const lockKeys = [
+    "schemaVersion",
+    "source",
+    "archiveSha256",
+    "manifestSha256",
+    "releaseId",
+    "version",
+    "manifestSchemaVersion",
+  ];
+  if (Object.hasOwn(lock, "producerCommit")) {
+    lockKeys.push("producerCommit");
+  }
+  assertExactKeys(lock, lockKeys, "Corpus Release lock");
   if (lock.schemaVersion !== LOCK_SCHEMA_VERSION) {
     throw new Error(`Unsupported Corpus Release lock: ${lock.schemaVersion}`);
   }
@@ -122,6 +134,15 @@ export function validateCorpusReleaseLock(lock) {
       `Unsupported locked manifest schema: ${lock.manifestSchemaVersion}`,
     );
   }
+  if (
+    lock.producerCommit !== undefined
+    && (
+      typeof lock.producerCommit !== "string"
+      || !/^[a-f0-9]{40}$/.test(lock.producerCommit)
+    )
+  ) {
+    throw new Error("Corpus Release lock has an invalid producer commit");
+  }
   let sourceUrl;
   try {
     sourceUrl = new URL(lock.source.url);
@@ -151,7 +172,7 @@ export async function readCorpusReleaseLock(
   } catch (error) {
     if (error.code === "ENOENT") {
       throw new Error(
-        `No active Corpus Release lock at ${lockPath}. Add the published v0.2 lock as one reviewed file before fetching.`,
+        `No active Corpus Release lock at ${lockPath}. Add a published Corpus lock as one reviewed file before fetching.`,
       );
     }
     throw error;
@@ -246,11 +267,14 @@ function validateManifestIdentity(manifest, lock) {
   if (manifest.version !== lock.version) {
     throw new Error("Corpus Release manifest version disagrees with lock");
   }
-  if (
-    manifest.producer?.repository
-    && manifest.producer.repository !== lock.source.repository
-  ) {
+  if (manifest.producer?.repository !== lock.source.repository) {
     throw new Error("Corpus Release producer repository disagrees with lock");
+  }
+  if (
+    lock.producerCommit !== undefined
+    && manifest.producer?.commit !== lock.producerCommit
+  ) {
+    throw new Error("Corpus Release producer commit disagrees with lock");
   }
 }
 
@@ -283,9 +307,13 @@ function artifactIndex(manifest) {
   return result;
 }
 
-function compileSchema(schema, label) {
+function compileSchema(schema, label, referencedSchemas = []) {
   try {
-    return new Ajv2020({ allErrors: true, strict: false }).compile(schema);
+    const ajv = new Ajv2020({ allErrors: true, strict: false });
+    for (const referencedSchema of referencedSchemas) {
+      ajv.addSchema(referencedSchema);
+    }
+    return ajv.compile(schema);
   } catch (error) {
     throw new Error(`${label} is not a valid JSON Schema: ${error.message}`);
   }
@@ -299,8 +327,12 @@ function parseJson(bytes, label) {
   }
 }
 
-function validateSearchRecords(contents, schema) {
-  const validate = compileSchema(schema, "Corpus record schema");
+function validateSearchRecords(contents, schema, referencedSchemas = []) {
+  const validate = compileSchema(
+    schema,
+    "Corpus record schema",
+    referencedSchemas,
+  );
   for (const [filePath, body] of Object.entries(contents)) {
     if (!filePath.endsWith(".jsonl")) {
       continue;
@@ -326,6 +358,9 @@ function provenanceIdentity(lock) {
     sourceRepository: lock.source.repository,
     sourceTag: lock.source.tag,
     sourceAsset: lock.source.asset,
+    ...(lock.producerCommit
+      ? { producerCommit: lock.producerCommit }
+      : {}),
   };
 }
 
@@ -397,9 +432,11 @@ async function verifyReleaseDirectory(root, { lock } = {}) {
         throw new Error(`Artifact byte length mismatch: ${artifact.path}`);
       }
       const artifactPath = path.join(root, ...artifact.path.split("/"));
-      const retainedForSearch = Object.values(REQUIRED_FILE_PATHS).includes(
-        artifact.path,
-      );
+      const retainedForSearch = [
+        ...Object.values(REQUIRED_FILE_PATHS),
+        ...Object.values(CORPUS_GATEWAY_RECORD_FILE_PATHS),
+        ...OPTIONAL_SCHEMA_FILE_PATHS,
+      ].includes(artifact.path);
       const bytes = retainedForSearch ? await readFile(artifactPath) : null;
       const digest = bytes ? sha256(bytes) : await sha256File(artifactPath);
       if (digest !== artifact.sha256) {
@@ -414,12 +451,22 @@ async function verifyReleaseDirectory(root, { lock } = {}) {
   const contents = Object.fromEntries(verified);
   validateSearchRecords(
     Object.fromEntries(
-      Object.values(REQUIRED_FILE_PATHS).map((filePath) => [
-        filePath,
-        contents[filePath],
-      ]),
+      [
+        ...Object.values(REQUIRED_FILE_PATHS),
+        ...Object.values(CORPUS_GATEWAY_RECORD_FILE_PATHS),
+      ]
+        .filter((filePath) => contents[filePath] !== undefined)
+        .map((filePath) => [filePath, contents[filePath]]),
     ),
     parseJson(Buffer.from(contents["schema.json"]), "Corpus record schema"),
+    OPTIONAL_SCHEMA_FILE_PATHS
+      .filter((filePath) => contents[filePath] !== undefined)
+      .map((filePath) =>
+        parseJson(
+          Buffer.from(contents[filePath]),
+          `Corpus referenced schema ${filePath}`,
+        ),
+      ),
   );
 
   return {
@@ -434,10 +481,12 @@ async function verifyReleaseDirectory(root, { lock } = {}) {
           manifestSha256: manifestDigest,
         },
     files: Object.fromEntries(
-      Object.entries(REQUIRED_FILE_PATHS).map(([key, filePath]) => [
-        key,
-        contents[filePath],
-      ]),
+      [
+        ...Object.entries(REQUIRED_FILE_PATHS),
+        ...Object.entries(CORPUS_GATEWAY_RECORD_FILE_PATHS).filter(
+          ([, filePath]) => contents[filePath] !== undefined,
+        ),
+      ].map(([key, filePath]) => [key, contents[filePath]]),
     ),
   };
 }
