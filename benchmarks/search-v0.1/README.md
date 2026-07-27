@@ -24,3 +24,8 @@ The two negative probes use exactly the same retrieval policy as interactive
 search. This lexical baseline has no calibrated abstention layer and returns a
 partial match for both probes; the committed negative-abstention score is
 therefore 0.0.
+
+The executable benchmark refuses any release whose ID, version, manifest
+digest, Document count, or Passage count differs from the frozen Corpus v0.1
+candidate universe. Corpus v0.2.x requires a separately versioned judgment set
+and report; it is not a silent replacement for these historical candidates.
