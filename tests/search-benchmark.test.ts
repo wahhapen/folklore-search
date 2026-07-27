@@ -17,6 +17,16 @@ describe("Search Benchmark v0.1", () => {
       },
     });
     expect(result.metrics.positiveQueries).toBe(16);
+    expect(result.metrics.corpus).toMatchObject({
+      releaseId: "fa:release:corpus-v0.1.0",
+      version: "0.1.0",
+      manifestSha256:
+        "1e614c013f4ec9a21e574a17653c8430eee11ae95ba80cc099a7dc52c7f257ca",
+    });
+    expect(result.metrics.candidateUniverse).toEqual({
+      documents: 170,
+      passages: 3291,
+    });
     expect(result.metrics.negativeQueries).toBe(2);
     expect(result.metrics.citationIntegrity).toBe(1);
     expect(result.metrics.ndcgAt10).toBeGreaterThanOrEqual(0.7);
@@ -43,5 +53,18 @@ describe("Search Benchmark v0.1", () => {
     const run = readFileSync("reports/search/search-v0.1/run.jsonl", "utf8");
     expect(run).toContain("fa:passage:");
     expect(run).toContain("citationLabel");
+  });
+
+  it("refuses a benchmark corpus outside the frozen v0.1 universe", async () => {
+    const v02Lock = JSON.parse(
+      readFileSync("corpus-release.lock.json", "utf8"),
+    );
+    await expect(
+      runSearchBenchmark({
+        writeReports: false,
+        releaseRoot: "data/derived/releases/corpus-v0.1.0",
+        lock: v02Lock,
+      }),
+    ).rejects.toThrow();
   });
 });
