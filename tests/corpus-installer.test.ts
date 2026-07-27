@@ -106,7 +106,7 @@ describe("digest-pinned Corpus Release installer", () => {
     expect(requests).toBe(1);
   });
 
-  it("preserves the complete locked release provenance in benchmark output", async () => {
+  it("refuses the current locked release as the historical benchmark universe", async () => {
     const fixture = createCorpusReleaseFixture();
     const { url } = await serve((_request, response) => {
       response.end(fixture.archive);
@@ -119,13 +119,13 @@ describe("digest-pinned Corpus Release installer", () => {
       cacheRoot: join(root, "cache"),
     });
 
-    const result = await runSearchBenchmark({
-      writeReports: false,
-      releaseRoot: release.root,
-      lock,
-    });
-
-    expect(result.metrics.corpus).toEqual(release.identity);
+    await expect(
+      runSearchBenchmark({
+        writeReports: false,
+        releaseRoot: release.root,
+        lock,
+      }),
+    ).rejects.toThrow("Search v0.1 requires Corpus v0.1 identity");
   });
 
   it("rejects changed archive bytes before creating a cache entry", async () => {
