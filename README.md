@@ -19,6 +19,7 @@ npm run corpus:fetch
 npm run corpus:verify
 npm run corpus:status
 npm run search -- "children leave bread crumbs birds eat them"
+npm run motif:card -- --motif "<owner-supplied label>" --query "<lexical search terms>" --output "../motif-cards/<card-name>.md"
 npm run benchmark
 npm test
 ```
@@ -78,6 +79,22 @@ network access and requires the exact verified cache entry to exist.
 The interactive CLI uses this gateway. The historical benchmark continues to
 load its separately verified and digest-frozen Corpus v0.1 universe, while
 sharing the same production BM25F constructor and ranking policy.
+
+## Markdown motif references
+
+`motif:card` writes one deterministic Markdown reference from an explicit
+owner-supplied label and lexical query. It uses the verified locked Corpus
+release and unchanged production ranking, then records the top ten unique
+Documents in a comparison table. Every text candidate includes the complete
+Passage text, stable Passage/Witness/Document IDs, Corpus-supplied cultural
+labels, matched query terms, retrieval score, and source citation when present.
+Metadata-only leads are labeled, separated, and never presented as quotations.
+
+The separate `--motif` and `--query` arguments are intentional: the card title
+is an owner choice, while the query is only the wording used to retrieve leads.
+Cards describe lexical candidates, not verified motif classifications. A
+missing result does not establish that a tradition lacks the motif, and no
+generated card is committed to this repository.
 
 ## Importable BM25F module
 
