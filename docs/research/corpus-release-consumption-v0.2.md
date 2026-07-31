@@ -1,8 +1,12 @@
 # Verified Corpus Release consumption contract (v0.2 research)
 
-Status: recommended contract for implementation  
+Status: implemented; retained as the original v0.2 design record  
 Issue: [`folklore-search#2`](https://github.com/wahhapen/folklore-search/issues/2)  
 Researched: 2026-07-24
+
+The active consumer lock now pins Corpus v0.3.0. `README.md` and
+`corpus-release.lock.json` describe current behavior; v0.2 names below are
+historical design examples.
 
 ## Decision
 
