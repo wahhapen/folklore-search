@@ -17,6 +17,7 @@
     "corpus:status": "node scripts/corpus-release-status.mjs",
     "corpus:verify": "node scripts/verify-corpus-release.mjs",
     "search": "node scripts/search-corpus.mjs",
+    "motif:card": "node scripts/generate-motif-card.mjs",
     "benchmark": "node scripts/run-search-benchmark.mjs",
     "typecheck": "tsc --noEmit --strict --module NodeNext --moduleResolution NodeNext --target ES2022 tests/gateway-types.test-d.ts",
     "test": "vitest run",
